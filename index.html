@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>JavaScript modules</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <nav id="navbar">
+      <header>JavaScript modules</header>
+      <a class="nav-link" href="#A_background_on_modules">A background on modules</a>
+      <a class="nav-link" href="#Exporting_module_features">Exporting module features</a>
+      <a class="nav-link" href="#Importing_features_into_your_script">Importing features into your script</a>
+      <a class="nav-link" href="#How_to_use_imported_modules">How to use imported modules</a>
+      <a class="nav-link" href="#Other_differences_between_modules_and_standard_scripts">Other differences between modules and standard scripts
+</a>
+      <a class="nav-link" href="#Creating_a_module_object">Creating a module object</a>
+      <a class="nav-link" href="#Reference">Reference</a>
+    </nav>
+    <main id="main-doc">
+      <section class="main-section" id="A_background_on_modules">
+        <header>
+          A background on modules
+        </header>
+        <p>
+          JavaScript programs started off pretty small — most of its usage in the early days was to do isolated scripting tasks, providing a bit of interactivity to your web pages where needed, so large scripts were generally not needed. Fast forward a few years and we now have complete applications being run in browsers with a lot of JavaScript, as well as JavaScript being used in other contexts (Node.js, for example).
+        </p>
+        <p>
+          It has therefore made sense in recent years to start thinking about providing mechanisms for splitting JavaScript programs up into separate modules that can be imported when needed.
+        </p>
+      </section>
+      <section class="main-section" id="Exporting_module_features">
+        <header>Exporting module features</header>
+        <p>
+          The first thing you do to get access to module features is export them. This is done using the export statement.
+        </p>
+        <p>
+          The easiest way to use it is to place it in front of any items you want exported out of the module, for example:
+        </p>
+        <pre>
+        <code>
+          export const name = "square";
+
+          export function draw(ctx, length, x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, length, length);
+
+            return { length, x, y, color };
+          }
+        </code>
+        </pre>
+        <p>This is usefol for:</p>
+        <ul>
+          <li>Reusing code</li>
+          <li>To keep a better organization of the code</li>
+        </ul>
+
+      </section>
+      <section class="main-section" id="Importing_features_into_your_script">
+        <header>Importing features into your script</header>
+        <p>Once you've exported some features out of your module, you need to import them into your script to be able to use them. The simplest way to do this is as follows:</p>
+        <pre><code>import { name, draw, reportArea, reportPerimeter } from "./modules/square.js";
+</code></pre>
+<p>You use the import statement, followed by a comma-separated list of the features you want to import wrapped in curly braces, followed by the keyword from, followed by the module specifier.</p>
+      </section>
+      <section class="main-section" id="How_to_use_imported_modules">
+        <header>How to use imported modules</header>
+        <p>Once you've imported the features into your script, you can use them just like they were defined inside the same file. The following is found in main.js, below the import lines:</p>
+        <pre><code>const myCanvas = create("myCanvas", document.body, 480, 320);
+const reportList = createReportList(myCanvas.id);
+
+const square1 = draw(myCanvas.ctx, 50, 50, 100, "blue");
+reportArea(square1.length, reportList);
+reportPerimeter(square1.length, reportList);</code></pre>
+      </section>
+      <section class="main-section" id="Other_differences_between_modules_and_standard_scripts">
+        <header>Other differences between modules and standard scripts</header>
+        <ul>
+          <li>Modules are only executed once, even if they have been referenced in multiple script tags.</li>
+          <li>You need to pay attention to local testing — if you try to load the HTML file locally (i.e. with a file:// URL), you'll run into CORS errors due to JavaScript module security requirements. You need to do your testing through a server.</li>
+          <li>Also, note that you might get different behavior from sections of script defined inside modules as opposed to in standard scripts. This is because modules use strict mode automatically.</li>
+        </ul>
+      </section>
+      <section class="main-section" id="Creating_a_module_object">
+        <header>Creating a module object</header>
+        <p>To import each module's features inside a module object:</p>
+        <pre><code>import * as Module from "./modules/module.js";</code></pre>
+        <p>This grabs all the exports available inside module.js, and makes them available as members of an object Module, effectively giving it its own namespace. So for example:</p>
+        <pre><code>Module.function1();
+Module.function2();</code></pre>
+      </section>
+      <section class="main-section" id="Reference">
+        <header>Reference</header>
+        <ul>
+          <li>All the documentation in this page is taken from <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">MDN</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
